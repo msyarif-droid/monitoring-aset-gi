@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring Aset GI 150 kV</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+}
+header {
+  background: #12345a;
+  color: white;
+  padding: 24px;
+}
+header h1 { margin: 0 0 8px; font-size: 24px; }
+header p { margin: 0; color: #cbd5e1; }
+.container { padding: 24px; max-width: 1100px; margin: auto; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0000000d;
+}
+.card p { color: #64748b; margin: 0 0 10px; }
+.card h2 { margin: 0; font-size: 30px; }
+.section {
+  background: white;
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  padding: 13px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+th { background: #f8fafc; }
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.normal { background: #dcfce7; color: #166534; }
+.anomali { background: #fee2e2; color: #991b1b; }
+footer { text-align: center; padding: 20px; color: #64748b; }
+@media(max-width:600px) {
+  .cards { grid-template-columns: 1fr; }
+  .container { padding: 14px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Monitoring Aset Gardu Induk</h1>
+  <p>Dashboard Simulasi GI 150 kV</p>
+</header>
+
+<div class="container">
+
+  <div class="cards">
+    <div class="card">
+      <p>Total Peralatan</p>
+      <h2 id="total">0</h2>
+    </div>
+    <div class="card">
+      <p>Kondisi Normal</p>
+      <h2 id="normal">0</h2>
+    </div>
+    <div class="card">
+      <p>Kondisi Anomali</p>
+      <h2 id="anomali">0</h2>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Daftar Monitoring Peralatan</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Peralatan</th>
+          <th>Lokasi</th>
+          <th>Kondisi</th>
+        </tr>
+      </thead>
+      <tbody id="assetTable"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  Monitoring Aset GI 150 kV | Data Simulasi
+</footer>
+
+<script>
+const assets = [
+  {name:"Trafo IBT 1", location:"Bay Trafo 1", status:"Normal"},
+  {name:"PMT Line 1", location:"Bay Line 1", status:"Normal"},
+  {name:"PMT Line 2", location:"Bay Line 2", status:"Anomali"},
+  {name:"CT Kopel", location:"Bay Kopel", status:"Normal"},
+  {name:"CVT Line 1", location:"Bay Line 1", status:"Anomali"},
+  {name:"PMS Trafo 1", location:"Bay Trafo 1", status:"Normal"}
+];
+
+document.getElementById("total").textContent = assets.length;
+document.getElementById("normal").textContent =
+  assets.filter(a => a.status === "Normal").length;
+document.getElementById("anomali").textContent =
+  assets.filter(a => a.status === "Anomali").length;
+
+document.getElementById("assetTable").innerHTML =
+  assets.map((a, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td>${a.name}</td>
+      <td>${a.location}</td>
+      <td><span class="status ${
+        a.status === "Normal" ? "normal" : "anomali"
+      }">${a.status}</span></td>
+    </tr>
+  `).join("");
+</script>
+
+</body>
+</html>
